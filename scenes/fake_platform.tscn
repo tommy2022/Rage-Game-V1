@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://2xcbbgkecmrk"]
+
+[ext_resource type="Texture2D" uid="uid://duvhsak8fe26x" path="res://assets/sprites/platforms.png" id="1_pgsr4"]
+
+[node name="Fake Platform" type="Sprite2D" unique_id=447784310]
+texture = ExtResource("1_pgsr4")
+region_enabled = true
+region_rect = Rect2(17, 0, 30, 9)
