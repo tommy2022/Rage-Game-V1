@@ -23,4 +23,4 @@ func _appear(body: Node2D) -> void:
 	
 func _die_if_true(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		get_tree().call_deferred("reload_current_scene")
+		GameState.die()
