@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://c7dxmfaf1cy8s"]
+
+[ext_resource type="Script" uid="uid://cbntos8o05378" path="res://scenes/cactus.gd" id="1_3uwn4"]
+[ext_resource type="Texture2D" uid="uid://b8xkr0niojsvu" path="res://assets/sprites/cactus.png" id="1_fy5iu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wnfnq"]
+size = Vector2(43.5, 48.5)
+
+[sub_resource type="Animation" id="Animation_3uwn4"]
+resource_name = "Appear"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 0.062499996), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-1, 28), Vector2(-1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_iiia4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 0.062499996)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-1, 28)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f17ax"]
+_data = {
+&"Appear": SubResource("Animation_3uwn4"),
+&"RESET": SubResource("Animation_iiia4")
+}
+
+[node name="Cactus" type="Area2D" unique_id=481767342]
+script = ExtResource("1_3uwn4")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=649206922]
+position = Vector2(-1, 28)
+scale = Vector2(1, 0.062499996)
+texture = ExtResource("1_fy5iu")
+
+[node name="Hitbox" type="CollisionShape2D" parent="." unique_id=1421094328]
+position = Vector2(0.25, 7.25)
+shape = SubResource("RectangleShape2D_wnfnq")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=845196035]
+libraries/ = SubResource("AnimationLibrary_f17ax")

@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://kie6jjp4fqfb" path="res://scenes/player.gd" id="3_p57ef"]
 [ext_resource type="Script" uid="uid://bqtlwty8l8v73" path="res://scenes/path_2d.gd" id="5_p57ef"]
 [ext_resource type="Script" uid="uid://bqpn3wc6y6e3o" path="res://scenes/fall_area.gd" id="6_p57ef"]
+[ext_resource type="PackedScene" uid="uid://c7dxmfaf1cy8s" path="res://scenes/cactus.tscn" id="7_u5sy4"]
+[ext_resource type="PackedScene" uid="uid://cjnvt63hidhug" path="res://scenes/goal.tscn" id="8_gee14"]
 
 [sub_resource type="Animation" id="Animation_lbhrr"]
 resource_name = "Move"
@@ -18,14 +20,14 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.1, 3.9666667),
+"times": PackedFloat32Array(0.13333334, 3.82),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(351, -44), Vector2(576, -44)]
+"values": [Vector2(351, -44), Vector2(496, -44)]
 }
 
 [sub_resource type="Animation" id="Animation_iywne"]
-length = 0.001
+length = 4.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -33,21 +35,25 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0.1, 3.9),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(351, -44)]
+"values": [Vector2(355, -44), Vector2(496, -44)]
 }
+
+[sub_resource type="Animation" id="Animation_p57ef"]
+resource_name = "aa"
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_iywne"]
 _data = {
 &"Move": SubResource("Animation_lbhrr"),
-&"RESET": SubResource("Animation_iywne")
+&"RESET": SubResource("Animation_iywne"),
+&"aa": SubResource("Animation_p57ef")
 }
 
 [sub_resource type="Curve2D" id="Curve2D_lbhrr"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 90.72179, -1.8489494, -90.72179, 1.8489494, -84, 79)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 90.72179, -1.8489494, -90.72179, 1.8489494, -80, 79)
 }
 point_count = 2
 
@@ -69,7 +75,54 @@ func _process(delta: float) -> void:
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vn6fc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c48uj"]
-size = Vector2(22.63282, 20)
+size = Vector2(27.331757, 20)
+
+[sub_resource type="Animation" id="Animation_u5sy4"]
+resource_name = "Move"
+length = 2.1
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.6333333, 1.9666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(511, 46), Vector2(608, -44)]
+}
+
+[sub_resource type="Animation" id="Animation_gee14"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(511, 46)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0tnpc"]
+_data = {
+&"Move": SubResource("Animation_u5sy4"),
+&"RESET": SubResource("Animation_gee14")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kaunu"]
+size = Vector2(181.81818, 145.45453)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_seced"]
+size = Vector2(255.90866, 918.18176)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wnfnq"]
+size = Vector2(77.27281, 923.1818)
 
 [node name="Game" type="Node2D" unique_id=918739758]
 
@@ -87,10 +140,11 @@ false_platform = true
 [node name="Platform2" parent="." unique_id=142929013 instance=ExtResource("2_lnu2h")]
 position = Vector2(181, -85)
 
-[node name="Player" parent="." unique_id=1681178118 groups=["player"] instance=ExtResource("1_uwrxv")]
+[node name="Player" parent="." unique_id=1681178118 node_paths=PackedStringArray("breakable_layers") groups=["player"] instance=ExtResource("1_uwrxv")]
 z_index = 999
 position = Vector2(0, -1)
 script = ExtResource("3_p57ef")
+breakable_layers = [NodePath("../DisappearingTileLayer")]
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=692319398]
 position = Vector2(0, 1)
@@ -98,18 +152,22 @@ zoom = Vector2(4, 4)
 position_smoothing_enabled = true
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=688885657]
-tile_map_data = PackedByteArray("AAD7/wEAAAAAAAAAAAD7/wIAAAAAAAEAAAD7/wMAAAAAAAEAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAEAAAD8/wMAAAAAAAEAAAD9/wIAAAAAAAAAAAD9/wMAAAAAAAEAAAD+/wIAAAAAAAAAAAD+/wMAAAAAAAEAAAD//wIAAAAAAAAAAAD//wMAAAAAAAEAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAEAAAABAAEAAAAAAAAAAAABAAIAAAAAAAEAAAABAAMAAAAAAAEAAAACAAEAAAAAAAAAAAACAAIAAAAAAAEAAAACAAMAAAAAAAEAAAADAP//AAAAAAAAAAADAAAAAAAAAAEAAAADAAEAAAAAAAEAAAADAAIAAAAAAAEAAAADAAMAAAAAAAEAAAAEAP//AAAAAAAAAAAEAAAAAAAAAAEAAAAEAAEAAAAAAAEAAAAEAAIAAAAAAAEAAAAEAAMAAAAAAAEAAAAFAAIAAAAGAAAAAAAFAAMAAAAGAAEAAAAGAAIAAAAGAAAAAAAGAAMAAAAGAAEAAAAHAAIAAAAGAAAAAAAHAAMAAAAGAAEAAAALAAIAAAAGAAAAAAALAAMAAAAGAAEAAAAMAAIAAAAGAAAAAAAMAAMAAAAGAAEAAAD7/wQAAAAAAAEAAAD8/wQAAAAAAAEAAAD9/wQAAAAAAAEAAAD+/wQAAAAAAAEAAAD//wQAAAAAAAEAAAAAAAQAAAAAAAEAAAABAAQAAAAAAAEAAAACAAQAAAAAAAEAAAADAAQAAAAAAAEAAAAEAAQAAAAAAAEAAAAFAAQAAAAGAAEAAAAGAAQAAAAGAAEAAAAHAAQAAAAGAAEAAAAIAAIAAAAJAAAAAAAJAAIAAAAKAAAAAAAKAAIAAAALAAAAAAALAAQAAAAGAAEAAAAMAAQAAAAGAAEAAAD7/wAAAAAAAAUAAAD7////AAAAAAQAAAD7//7/AAAAAAQAAAD7//3/AAAAAAMAAAAPAAIAAAAGAAAAAAAPAAMAAAAGAAEAAAAPAAQAAAAGAAEAAAAQAPn/AAAAAAAAAAAQAPr/AAAAAAEAAAAQAPv/AAAAAAEAAAAQAPz/AAAAAAEAAAAQAP3/AAAAAAEAAAARAPr/AAAAAAAAAAARAPv/AAAAAAEAAAARAPz/AAAAAAEAAAARAP3/AAAAAAEAAAASAPv/AAAAAAAAAAASAPz/AAAAAAEAAAASAP3/AAAAAAEAAAATAPz/AAAAAAAAAAATAP3/AAAAAAEAAAAUAPr/AAAFAAMAAAAUAPv/AAAFAAQAAAAUAPz/AAAFAAUAAAAUAP3/AAAAAAAAAAAlAP3/AAACAAAAAAAlAP7/AAACAAEAAAAlAP//AAACAAEAAAAlAAAAAAACAAEAAAAlAAEAAAACAAEAAAAlAAIAAAACAAEAAAAlAAMAAAACAAEAAAAlAAQAAAACAAEAAAAmAP3/AAACAAAAAAAmAP7/AAACAAEAAAAmAP//AAACAAEAAAAmAAAAAAACAAEAAAAmAAEAAAACAAEAAAAmAAIAAAACAAEAAAAmAAMAAAACAAEAAAAmAAQAAAACAAEAAAAnAP3/AAACAAAAAAAnAP7/AAACAAEAAAAnAP//AAACAAEAAAAnAAAAAAACAAEAAAAnAAEAAAACAAEAAAAnAAIAAAACAAEAAAAnAAMAAAACAAEAAAAnAAQAAAACAAEAAAA=")
+tile_map_data = PackedByteArray("AAD7/wEAAAAAAAAAAAD7/wIAAAAAAAEAAAD7/wMAAAAAAAEAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAEAAAD8/wMAAAAAAAEAAAD9/wIAAAAAAAAAAAD9/wMAAAAAAAEAAAD+/wIAAAAAAAAAAAD+/wMAAAAAAAEAAAD//wIAAAAAAAAAAAD//wMAAAAAAAEAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAEAAAABAAEAAAAAAAAAAAABAAIAAAAAAAEAAAABAAMAAAAAAAEAAAACAAEAAAAAAAAAAAACAAIAAAAAAAEAAAACAAMAAAAAAAEAAAADAP//AAAAAAAAAAADAAAAAAAAAAEAAAADAAEAAAAAAAEAAAADAAIAAAAAAAEAAAADAAMAAAAAAAEAAAAEAP//AAAAAAAAAAAEAAAAAAAAAAEAAAAEAAEAAAAAAAEAAAAEAAIAAAAAAAEAAAAEAAMAAAAAAAEAAAAFAAIAAAAGAAAAAAAFAAMAAAAGAAEAAAAGAAIAAAAGAAAAAAAGAAMAAAAGAAEAAAAHAAIAAAAGAAAAAAAHAAMAAAAGAAEAAAALAAIAAAAGAAAAAAALAAMAAAAGAAEAAAAMAAIAAAAGAAAAAAAMAAMAAAAGAAEAAAD7/wQAAAAAAAEAAAD8/wQAAAAAAAEAAAD9/wQAAAAAAAEAAAD+/wQAAAAAAAEAAAD//wQAAAAAAAEAAAAAAAQAAAAAAAEAAAABAAQAAAAAAAEAAAACAAQAAAAAAAEAAAADAAQAAAAAAAEAAAAEAAQAAAAAAAEAAAAFAAQAAAAGAAEAAAAGAAQAAAAGAAEAAAAHAAQAAAAGAAEAAAAIAAIAAAAJAAAAAAAJAAIAAAAKAAAAAAAKAAIAAAALAAAAAAALAAQAAAAGAAEAAAAMAAQAAAAGAAEAAAD7/wAAAAAAAAUAAAD7////AAAAAAQAAAD7//7/AAAAAAQAAAD7//3/AAAAAAMAAAAPAAIAAAAGAAAAAAAPAAMAAAAGAAEAAAAPAAQAAAAGAAEAAAAQAPn/AAAAAAAAAAAQAPr/AAAAAAEAAAAQAPv/AAAAAAEAAAAQAPz/AAAAAAEAAAAQAP3/AAAAAAEAAAARAPr/AAAAAAAAAAARAPv/AAAAAAEAAAARAPz/AAAAAAEAAAARAP3/AAAAAAEAAAASAPv/AAAAAAAAAAASAPz/AAAAAAEAAAASAP3/AAAAAAEAAAATAPz/AAAAAAAAAAATAP3/AAAAAAEAAAAUAPr/AAAFAAMAAAAUAPv/AAAFAAQAAAAUAPz/AAAFAAUAAAAUAP3/AAAAAAAAAAAnAP3/AAACAAAAAAAnAP7/AAACAAEAAAAnAP//AAACAAEAAAAnAAAAAAACAAEAAAAnAAEAAAACAAEAAAAnAAIAAAACAAEAAAAnAAMAAAACAAEAAAAnAAQAAAACAAEAAAAoAP3/AAACAAAAAAAoAP7/AAACAAEAAAAoAP//AAACAAEAAAAoAAAAAAACAAEAAAAoAAEAAAACAAEAAAAoAAIAAAACAAEAAAAoAAMAAAACAAEAAAAoAAQAAAACAAEAAAApAP3/AAACAAAAAAApAP7/AAACAAEAAAApAP//AAACAAEAAAApAAAAAAACAAEAAAApAAEAAAACAAEAAAApAAIAAAACAAEAAAApAAMAAAACAAEAAAApAAQAAAACAAEAAAAqAP3/AAACAAAAAAAqAP7/AAACAAEAAAAqAP//AAACAAEAAAAqAAAAAAACAAEAAAAqAAEAAAACAAEAAAAqAAIAAAACAAEAAAAqAAMAAAACAAEAAAAqAAQAAAACAAEAAAArAP3/AAACAAAAAAArAP7/AAACAAEAAAArAP//AAACAAEAAAArAAAAAAACAAEAAAArAAEAAAACAAEAAAArAAIAAAACAAEAAAArAAMAAAACAAEAAAArAAQAAAACAAEAAAAsAP3/AAACAAAAAAAsAP7/AAACAAEAAAAsAP//AAACAAEAAAAsAAAAAAACAAEAAAAsAAEAAAACAAEAAAAsAAIAAAACAAEAAAAsAAMAAAACAAEAAAAsAAQAAAACAAEAAAA=")
+tile_set = ExtResource("2_yqjtg")
+
+[node name="DisappearingTileLayer" type="TileMapLayer" parent="." unique_id=379732214]
+tile_map_data = PackedByteArray("AAAmAAAAAAACAAEAAAAmAP//AAACAAEAAAAmAP7/AAACAAEAAAAmAP3/AAACAAAAAAAlAP3/AAACAAAAAAAlAP7/AAACAAEAAAAlAP//AAACAAEAAAAlAAAAAAACAAEAAAAlAAEAAAACAAEAAAAlAAIAAAACAAEAAAAlAAMAAAACAAEAAAAlAAQAAAACAAEAAAAmAAQAAAACAAEAAAAmAAMAAAACAAEAAAAmAAIAAAACAAEAAAAmAAEAAAACAAEAAAA=")
 tile_set = ExtResource("2_yqjtg")
 
 [node name="Moving Platform" parent="." unique_id=1320241588 instance=ExtResource("2_lnu2h")]
 visible = false
-position = Vector2(351, -44)
+position = Vector2(355, -44)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Moving Platform" unique_id=1547118718]
 libraries/ = SubResource("AnimationLibrary_iywne")
 
 [node name="Path2D" type="Path2D" parent="." unique_id=575494042 node_paths=PackedStringArray("platform_to_reveal", "trigger_point")]
-position = Vector2(354, -44)
+position = Vector2(352, -44)
 curve = SubResource("Curve2D_lbhrr")
 script = ExtResource("5_p57ef")
 platform_to_reveal = NodePath("../Moving Platform")
@@ -124,6 +182,7 @@ script = SubResource("GDScript_iywne")
 [node name="Platform" parent="Path2D/PathFollow2D" unique_id=544127968 instance=ExtResource("2_lnu2h")]
 position = Vector2(3.8146973e-06, 0)
 rotation = -2.3893557
+sync_to_physics = false
 
 [node name="Area2D" type="Area2D" parent="Path2D/PathFollow2D" unique_id=1797521886]
 
@@ -139,6 +198,62 @@ position = Vector2(-28, 8)
 script = ExtResource("6_p57ef")
 
 [node name="DeathCollision" type="CollisionShape2D" parent="FallArea" unique_id=2121731860]
-position = Vector2(254, 90)
+position = Vector2(295.99997, 90)
 scale = Vector2(33.88, 1)
 shape = SubResource("RectangleShape2D_c48uj")
+
+[node name="Platform5" parent="." unique_id=1262354058 instance=ExtResource("2_lnu2h")]
+position = Vector2(511, 46)
+start_moving_on_enter = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Platform5" unique_id=1258102475]
+libraries/ = SubResource("AnimationLibrary_0tnpc")
+
+[node name="Cactus" parent="." unique_id=481767342 node_paths=PackedStringArray("collision_area_to_unhide") instance=ExtResource("7_u5sy4")]
+position = Vector2(181, -96)
+scale = Vector2(0.22, 0.22)
+fake_collision = true
+collision_area_to_unhide = NodePath("DisplayTrigger")
+
+[node name="DisplayTrigger" type="Area2D" parent="Cactus" unique_id=1060803050]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cactus/DisplayTrigger" unique_id=1923624915]
+position = Vector2(0, 13.636414)
+shape = SubResource("RectangleShape2D_kaunu")
+
+[node name="Cactus2" parent="." unique_id=638282820 node_paths=PackedStringArray("collision_area_to_unhide") instance=ExtResource("7_u5sy4")]
+position = Vector2(648, -54)
+scale = Vector2(0.22, 0.22)
+collision_area_to_unhide = NodePath("Area2D")
+
+[node name="Area2D" type="Area2D" parent="Cactus2" unique_id=754803744]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cactus2/Area2D" unique_id=493138838]
+position = Vector2(-240.22754, 140.90909)
+shape = SubResource("RectangleShape2D_seced")
+
+[node name="Cactus3" parent="." unique_id=1632395130 node_paths=PackedStringArray("collision_area_to_unhide") instance=ExtResource("7_u5sy4")]
+position = Vector2(632, -54)
+scale = Vector2(0.22, 0.22)
+collision_area_to_unhide = NodePath("Area2D")
+
+[node name="Area2D" type="Area2D" parent="Cactus3" unique_id=1844636763]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cactus3/Area2D" unique_id=444101813]
+position = Vector2(-6.818115, 142.95456)
+shape = SubResource("RectangleShape2D_wnfnq")
+
+[node name="Cactus4" parent="." unique_id=877279554 node_paths=PackedStringArray("collision_area_to_unhide") instance=ExtResource("7_u5sy4")]
+position = Vector2(680, -54)
+scale = Vector2(0.22, 0.22)
+collision_area_to_unhide = NodePath("Area2D")
+
+[node name="Area2D" type="Area2D" parent="Cactus4" unique_id=648447936]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cactus4/Area2D" unique_id=161985109]
+position = Vector2(-6.818115, 142.95456)
+shape = SubResource("RectangleShape2D_wnfnq")
+
+[node name="Goal" parent="." unique_id=865878760 instance=ExtResource("8_gee14")]
+position = Vector2(712, -54)
+scale = Vector2(0.2, 0.2)

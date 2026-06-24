@@ -4,7 +4,7 @@ extends Path2D
 @export var trigger_point: Area2D
 
 # Adjust this to change how fast the platform moves
-@export var speed: float = 0.4
+@export var speed: float = 0.5
 
 @onready var path_follow: PathFollow2D = $PathFollow2D
 
@@ -28,6 +28,7 @@ func _move_platform(delta: float) -> void:
 	
 	if path_follow.progress_ratio >= 1.0 and not revealed_platform:
 		platform_to_reveal.enable()
+		platform_to_reveal.get_node("AnimationPlayer").play("Move")
 		revealed_platform = true
 
 func _check_for_player(body: Node2D):

@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cjnvt63hidhug"]
+
+[ext_resource type="Texture2D" uid="uid://bkl7nnnec5ch" path="res://assets/sprites/flag_red_a.png" id="1_jbojv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vn6fc"]
+size = Vector2(57, 52)
+
+[node name="Goal" type="Area2D" unique_id=865878760]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1489669938]
+position = Vector2(-1, 4)
+shape = SubResource("RectangleShape2D_vn6fc")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1418565558]
+texture = ExtResource("1_jbojv")

@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+@export var breakable_layers: Array[TileMapLayer] = []
 
 const SPEED = 150.0
 const JUMP_VELOCITY = -300.0
@@ -22,11 +23,19 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
-	var platform_velocity = Vector2.ZERO
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
-		if collision.get_collider() is AnimatableBody2D and collision.get_collider().has_method("get_platform_velocity"):
-			platform_velocity = collision.get_collider().get_platform_velocity()
-			velocity.x += platform_velocity.x
+		var collider = collision.get_collider()
+
+		if collider is TileMapLayer and collider in breakable_layers:
+			var breakable_layer = collider as TileMapLayer
+
+			breakable_layer.collision_enabled = false
+			breakable_layer.visible = false
+	
+	if direction > 0:
+		$AnimatedSprite2D.flip_h = false
+	elif direction < 0:
+		$AnimatedSprite2D.flip_h = true
 
 	move_and_slide()

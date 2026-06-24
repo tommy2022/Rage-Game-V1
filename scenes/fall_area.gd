@@ -6,4 +6,4 @@ func _ready() -> void:
 
 func _die(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		get_tree().reload_current_scene()
+		get_tree().call_deferred("reload_current_scene")

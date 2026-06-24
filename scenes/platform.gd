@@ -1,4 +1,4 @@
-extends StaticBody2D
+extends AnimatableBody2D
 class_name Platform
 
 @onready var _collider: CollisionShape2D = $Collider
@@ -6,6 +6,7 @@ class_name Platform
 
 @export var disappearing_platform: bool = false
 @export var false_platform: bool = false
+@export var start_moving_on_enter: bool = false
 
 var _triggered: bool = false
 
@@ -22,11 +23,16 @@ func enable(enabled: bool = true) -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and not _triggered:
-		_disapper()
+		if disappearing_platform:
+			_disapper()
+		if start_moving_on_enter:
+			_start_moving()
 		_triggered = true
 
 func _disapper() -> void:
 	call_deferred("enable", false)
 
+func _start_moving() -> void:
+	$AnimationPlayer.play("Move")
 func has_body_entered_trigger() -> bool:
-	return disappearing_platform
+	return disappearing_platform || start_moving_on_enter
