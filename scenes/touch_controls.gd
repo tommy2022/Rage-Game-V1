@@ -65,6 +65,11 @@ func _input(event: InputEvent) -> void:
 				_touches[event.index] = now
 				Input.action_press(_buttons[now]["action"])
 
+func _exit_tree() -> void:
+	for finger in _touches:
+		Input.action_release(_buttons[_touches[finger]]["action"])
+	_touches.clear()
+
 func _draw() -> void:
 	var font := ThemeDB.fallback_font
 	var fs := 28
